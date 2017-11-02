@@ -102,7 +102,6 @@ func UpdateProfile(id int, updPro UserProfile) error {
 func UpdatePassword(id int, oldPawd string, newPwd string) error {
 	o := orm.NewOrm()
 	//salt := com.RandString(10)
-
 	user := User{Id: id}
 	err := o.Read(&user)
 	if nil != err {
