@@ -18,6 +18,8 @@ func init() {
 
 	beego.Router("/article/add", &controllers.AddArticleController{})
 	beego.Router("/article/edit/:id", &controllers.EditArticleController{})
+	beego.Router("/article/list", &controllers.ListArticleController{})
+
 
 	beego.Router("/comment/add", &controllers.AddCommentController{})
 	beego.Router("/comment/edit/status", &controllers.EditCommentController{})
@@ -30,6 +32,8 @@ func init() {
 
 	beego.Router("/uploadmulti", &controllers.UploadMultiController{})
 	beego.Router("/upload", &controllers.UploadController{})
+
+	beego.Router("/index", &controllers.AdminIndexController{})
 
 	//beego.Router("/article/ajax/add", &controllers.AddArticleController{}, "*:AddPost")
 	//beego.Router("/article/add", &controllers.AddArticleController{}, "*:Add")
