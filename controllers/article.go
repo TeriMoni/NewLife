@@ -149,6 +149,11 @@ type ListArticleController struct {
 
 func (this *ListArticleController) Get() {
 
+	if !this.isLogin {
+		this.Redirect("/login",302)
+		return
+	}
+
 	page, err1 := this.GetInt("p")
 	title := this.GetString("title")
 	keywords := this.GetString("keywords")
@@ -181,7 +186,7 @@ func (this *ListArticleController) Get() {
 	//this.Data["isLogin"] = userLogin
 	//this.Data["isLogin"] = this.isLogin
 
-	this.TplName = "article.tpl"
+	this.TplName = "article.html"
 }
 
 //详情
