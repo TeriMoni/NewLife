@@ -1,11 +1,10 @@
-
 package models
 
 import (
-"fmt"
+	"fmt"
 
-"github.com/astaxie/beego/orm"
-"github.com/gogather/com"
+	"github.com/astaxie/beego/orm"
+	"github.com/gogather/com"
 )
 
 type User struct {
@@ -34,10 +33,11 @@ func (this *User) TableName() string {
 	return "user"
 }
 func init() {
-	orm.RegisterModel(new(User), new(UserProfile)) //
+	orm.RegisterModel(new(User), new(UserProfile))
 }
 
-func LoginUser(phone string, password string) (err error, user []User) {
+func LoginUser(phone string, password string) (err error, users User) {
+	user := User{}
 	o := orm.NewOrm()
 	qs := o.QueryTable("user")
 	cond := orm.NewCondition()
@@ -48,9 +48,8 @@ func LoginUser(phone string, password string) (err error, user []User) {
 	cond = cond.And("status", 1)
 
 	qs = qs.SetCond(cond)
-	var users []User
-	err1 := qs.Limit(1).One(&users)
-	return err1, users
+	err1 := qs.Limit(1).One(&user)
+	return err1, user
 }
 
 func GetUser(id int) (User, error) {
@@ -102,6 +101,7 @@ func UpdateProfile(id int, updPro UserProfile) error {
 func UpdatePassword(id int, oldPawd string, newPwd string) error {
 	o := orm.NewOrm()
 	//salt := com.RandString(10)
+
 	user := User{Id: id}
 	err := o.Read(&user)
 	if nil != err {
