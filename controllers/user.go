@@ -17,7 +17,7 @@ type LoginUserController struct {
 func (this *LoginUserController) Get() {
 	check := this.isLogin
 	if check {
-		this.Redirect("/article", 302)
+		this.Redirect("/index", 302)
 	} else {
 		this.Data["globaltitle"] =beego.AppConfig.String("globaltitle");
 		this.TplName = "login.tpl"
@@ -40,12 +40,17 @@ func (this *LoginUserController) Post() {
 	}
 
 	err, user := LoginUser(phone, password)
+	userProfile,err2 :=GetProfile(user.Id)
 
 	if err == nil {
 		this.SetSession("userLogin", "1")
+		if err2 == nil{
+			this.SetSession("userProfile",userProfile)
+		}
+
 		this.Data["json"] = map[string]interface{}{"code": 1, "message": "贺喜你，登录成功", "user": user}
 	} else {
-		this.Data["json"] = map[string]interface{}{"code": 0, "message": "登录失败"}
+		this.Data["json"] = map[string]interface{}{"code": 0, "message": "账号或者密码错误"}
 	}
 	this.ServeJSON()
 }
