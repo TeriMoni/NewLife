@@ -5,6 +5,7 @@ import (
 
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
+	"fmt"
 )
 
 type Article struct {
@@ -14,9 +15,21 @@ type Article struct {
 	Keywords string
 	Summary  string
 	Content  string
+	Category *Category `orm:"rel(one)"`
 	Author   string
 	Created  int64
 	Viewnum  int
+	Status   int
+	Tag string
+}
+
+type Category struct {
+	Id       int
+	Name    string
+	Alias    string
+	Keywords    string
+	Description    string
+	Author    string
 	Status   int
 }
 
@@ -27,7 +40,7 @@ func (this *Article) TableName() string {
 func init() {
 	//orm.RegisterDriver("mysql", orm.DRMySQL)
 	//orm.RegisterDataBase("default", "mysql", "root:@/blog?charset=utf8", 30)
-	orm.RegisterModel(new(Article))
+	orm.RegisterModel(new(Article),new(Category))
 	//orm.RunSyncdb("default", false, true)
 }
 
@@ -55,6 +68,7 @@ func UpdateArticle(id int, updArt Article) error {
 	art.Content = updArt.Content
 	art.Author = updArt.Author
 	art.Status = updArt.Status
+	art.Tag = updArt.Tag
 	_, err := o.Update(&art)
 	return err
 }
@@ -73,7 +87,7 @@ func AddArticle(updArt Article) (int64, error) {
 	art.Created = time.Now().Unix()
 	art.Viewnum = 1
 	art.Status = updArt.Status
-
+	art.Tag = updArt.Tag
 	id, err := o.Insert(art)
 	return id, err
 }
@@ -101,7 +115,7 @@ func ListArticle(condArr map[string]string, page int, offset int) (num int64, er
 	}
 	start := (page - 1) * offset
 	var articles []Article
-	num, err1 := qs.Limit(offset, start).All(&articles)
+	num, err1 := qs.Limit(offset, start).RelatedSel().All(&articles)
 	return num, err1, articles
 }
 
@@ -120,5 +134,14 @@ func CountArticle(condArr map[string]string) int64 {
 	}
 	num, _ := qs.SetCond(cond).Count()
 	return num
+}
+
+func GetAllCategory()(category []Category){
+	o := orm.NewOrm()
+	var categorys []Category
+	qs := o.QueryTable("category")
+	num,err := qs.All(&categorys)
+	fmt.Printf("Returned Rows Num: %s, %s", num, err)
+	return categorys
 }
 
