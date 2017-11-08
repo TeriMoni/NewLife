@@ -80,8 +80,7 @@ type EditArticleController struct {
 
 func (this *EditArticleController) Get() {
 	if !this.isLogin {
-		this.Data["json"] = map[string]interface{}{"code": 0, "message": "请先登录"}
-		this.ServeJSON()
+		this.Redirect("/login",302)
 		return
 	}
 	idstr := this.Ctx.Input.Param(":id")
@@ -91,11 +90,12 @@ func (this *EditArticleController) Get() {
 	if err != nil {
 		this.Redirect("/404.html", 302)
 	}
+	categories := GetAllCategory()
 	//this.Data["json"] = map[string]interface{}{"code": 0, "message": err}
 	//this.ServeJSON()
 	this.Data["art"] = art
-
-	this.TplName = "article-form.tpl"
+	this.Data["categories"] = categories
+	this.TplName = "update-article.html"
 }
 
 func (this *EditArticleController) Post() {
@@ -185,7 +185,7 @@ func (this *ListArticleController) Get() {
 	//userLogin := this.GetSession("userLogin")
 	//this.Data["isLogin"] = userLogin
 	//this.Data["isLogin"] = this.isLogin
-
+	this.Data["userProfile"] = this.GetSession("userProfile")
 	this.TplName = "article.html"
 }
 
