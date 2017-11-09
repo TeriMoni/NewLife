@@ -21,6 +21,8 @@ type Article struct {
 	Viewnum  int
 	Status   int
 	Tag string
+	Visibility int
+	Titlepic string
 }
 
 type Category struct {
@@ -69,6 +71,9 @@ func UpdateArticle(id int, updArt Article) error {
 	art.Author = updArt.Author
 	art.Status = updArt.Status
 	art.Tag = updArt.Tag
+	art.Visibility = updArt.Visibility
+	art.Titlepic = updArt.Titlepic
+	art.Category = updArt.Category
 	_, err := o.Update(&art)
 	return err
 }
@@ -88,6 +93,8 @@ func AddArticle(updArt Article) (int64, error) {
 	art.Viewnum = 1
 	art.Status = updArt.Status
 	art.Tag = updArt.Tag
+	art.Visibility = updArt.Visibility
+	art.Titlepic = updArt.Titlepic
 	id, err := o.Insert(art)
 	return id, err
 }
@@ -143,5 +150,12 @@ func GetAllCategory()(category []Category){
 	num,err := qs.All(&categorys)
 	fmt.Printf("Returned Rows Num: %s, %s", num, err)
 	return categorys
+}
+
+//删除文章
+func DeleteArticle(id int) error  {
+	o := orm.NewOrm()
+	_, err := o.Delete(&Article{Id: id})
+	return err
 }
 
