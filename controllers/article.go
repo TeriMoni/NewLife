@@ -2,7 +2,7 @@ package controllers
 
 import (
 	"strconv"
-
+	"NewLife/utils"
 	. "NewLife/models"
 
 	"github.com/astaxie/beego"
@@ -137,6 +137,7 @@ func (this *EditArticleController) Post() {
 	visibility,_ := this.GetInt("visibility")
 	titlepic := this.GetString("titlepic")
 	tags := this.GetString("tags")
+	created := this.GetString("created")
 	categoryId, _ := this.GetInt("categoryId")
 
 	if "" == title {
@@ -154,6 +155,7 @@ func (this *EditArticleController) Post() {
 		this.ServeJSON()
 	}
 
+
 	var art Article
 	var category Category
 	art.Title = title
@@ -166,6 +168,7 @@ func (this *EditArticleController) Post() {
 	art.Titlepic = titlepic
 	art.Tag = tags
 	category.Id = categoryId
+	art.Created =utils.GetTimestamp(created)
 	art.Category = &category
 
 	err = UpdateArticle(id, art)
