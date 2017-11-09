@@ -93,3 +93,9 @@ func GetGravatar() string {
 	i := RandInt64(1, 5)
 	return "/static/img/avatar/" + fmt.Sprintf("%d", i) + ".jpg"
 }
+
+//时间字符串转成时间戳，注意必须精确到秒
+func GetTimestamp(timeString string) int64 {
+	times,_ := time.ParseInLocation("2006-01-02 15:04:05",timeString,time.Local)
+	return times.Unix()
+}
