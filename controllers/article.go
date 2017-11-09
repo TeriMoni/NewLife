@@ -26,9 +26,12 @@ func (this *AddArticleController) Get() {
 	}
 	*/
 	var art Article
-	art.Status = 1
+	categories := GetAllCategory()
+	art.Status = 0
 	this.Data["art"] = art
-	this.TplName = "article-form.tpl"
+	this.Data["categories"] = categories
+	this.Data["userProfile"] = this.GetSession("userProfile")
+	this.TplName = "add-article.html"
 }
 
 func (this *AddArticleController) Post() {
@@ -73,6 +76,30 @@ func (this *AddArticleController) Post() {
 	this.ServeJSON()
 }
 
+type DeleteArticleController struct {
+	BaseController
+}
+
+func (this *DeleteArticleController) Get() {
+	if !this.isLogin {
+		this.Redirect("/login",302)
+		return
+	}
+	idstr := this.Ctx.Input.Param(":id")
+	id, err := strconv.Atoi(idstr)
+	if err != nil {
+		this.Redirect("/404.html", 302)
+	}
+	err2 := DeleteArticle(id)
+	if err2 == nil{
+		this.Data["json"] = map[string]interface{}{"code": 0, "message": "删除成功"}
+	}else{
+		this.Data["json"] = map[string]interface{}{"code": 1, "message": "删除失败"}
+	}
+	//this.Data["json"] = map[string]interface{}{"code": 0, "message": err}
+	this.ServeJSON()
+}
+
 //修改blog
 type EditArticleController struct {
 	BaseController
@@ -95,6 +122,7 @@ func (this *EditArticleController) Get() {
 	//this.ServeJSON()
 	this.Data["art"] = art
 	this.Data["categories"] = categories
+	this.Data["userProfile"] = this.GetSession("userProfile")
 	this.TplName = "update-article.html"
 }
 
@@ -103,10 +131,13 @@ func (this *EditArticleController) Post() {
 	title := this.GetString("title")
 	content := this.GetString("content")
 	keywords := this.GetString("keywords")
-	uri := this.GetString("uri")
 	summary := this.GetString("summary")
 	author := this.GetString("author")
 	status, _ := this.GetInt("status")
+	visibility,_ := this.GetInt("visibility")
+	titlepic := this.GetString("titlepic")
+	tags := this.GetString("tags")
+	categoryId, _ := this.GetInt("categoryId")
 
 	if "" == title {
 		this.Data["json"] = map[string]interface{}{"code": 0, "message": "请填写标题"}
@@ -124,13 +155,18 @@ func (this *EditArticleController) Post() {
 	}
 
 	var art Article
+	var category Category
 	art.Title = title
 	art.Keywords = keywords
-	art.Uri = uri
 	art.Summary = summary
 	art.Content = content
 	art.Author = author
 	art.Status = status
+	art.Visibility = visibility
+	art.Titlepic = titlepic
+	art.Tag = tags
+	category.Id = categoryId
+	art.Category = &category
 
 	err = UpdateArticle(id, art)
 
