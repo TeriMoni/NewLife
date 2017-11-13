@@ -20,7 +20,7 @@ func (this *LoginUserController) Get() {
 		this.Redirect("/index", 302)
 	} else {
 		this.Data["globaltitle"] =beego.AppConfig.String("globaltitle");
-		this.TplName = "login.tpl"
+		this.TplName = "login.html"
 	}
 
 }
