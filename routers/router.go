@@ -36,6 +36,13 @@ func init() {
 
 	beego.Router("/index", &controllers.AdminIndexController{})
 
+
+	//使用restful 自定义路由规则
+	beego.Router("/category/list",&controllers.CategoryController{},"*:ListCategory")
+	beego.Router("/category/add",&controllers.CategoryController{},"post:AddCategory")
+	beego.Router("/category/update/:id",&controllers.CategoryController{},"get:Get;post:UpdateCategory")
+	beego.Router("/category/delete/:id",&controllers.CategoryController{},"get:DeleteCategory")
+
 	//beego.Router("/article/ajax/add", &controllers.AddArticleController{}, "*:AddPost")
 	//beego.Router("/article/add", &controllers.AddArticleController{}, "*:Add")
 }
