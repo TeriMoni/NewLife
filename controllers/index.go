@@ -15,5 +15,6 @@ func (this *AdminIndexController) Get(){
 		return
 	}
 	this.Data["userProfile"] = this.GetSession("userProfile")
-	this.TplName="index.tpl"
+	this.Data["slider"]="index"
+	this.TplName="index.html"
 }
