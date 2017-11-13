@@ -45,7 +45,7 @@
             <h1 class="page-header">操作</h1>
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>栏目</span></h2>
-                <input type="hidden" id="contentId" value="{{.art.Category.Id}}" />
+              <input type="hidden" id="contentId" value="{{.art.Category.Id}}" />
               <div class="add-article-box-content">
                 <ul class="category-list">
                   {{range $k,$v := .categories}}
@@ -75,15 +75,26 @@
             </div>
             <div class="add-article-box">
               <h2 class="add-article-box-title"><span>发布</span></h2>
-              <div class="add-article-box-content">
-              	<p><label>状态：</label>
+              <div class="add-article-box-content horizontal">
+                <div class="form-group">
+                  <label>状态：</label>
                   <input type="radio" name="status" value="0" {{if eq .art.Status 0}}checked{{end}}/>草稿
-                  <input type="radio" name="status" value="1" {{if eq .art.Status 1}}checked{{end}}/>已发布</p>
-                </p>
-                <p><label>公开度：</label>
+                  <input type="radio" name="status" value="1" {{if eq .art.Status 1}}checked{{end}}/>已发布
+                </div>
+                <div class="form-group">
+                  <label>公开度：</label>
                   <input type="radio" name="visibility" value="0" {{if eq .art.Status 0}}checked{{end}}/>公开
-                  <input type="radio" name="visibility" value="1" {{if eq .art.Status 1}}checked{{end}}/>加密</p>
-                <p><label>发布于：</label><span class="article-time-display"><input style="border: none;" type="datetime" name="time" value="{{date .art.Created}}" /></span></p>
+                  <input type="radio" name="visibility" value="1" {{if eq .art.Status 1}}checked{{end}}/>加密
+                </div>
+                <div class="form-group">
+                  <div class="div-inline"><label>发布时间：</label></div>
+                  <div class='input-group date ' id='datetimepicker'>
+                    <input type='text' class="form-control" name="created" value="{{.art.Created}}" />
+                    <span class="input-group-addon">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                    </span>
+                  </div>
+                </div>
               </div>
               <input type="hidden" name="id" value="{{.art.Id}}" />
               <div class="add-article-box-footer">
@@ -240,11 +251,21 @@
 <script>
     $(function(){
         var categoryId = $("#contentId").val();
-        $("#categoryId").each(function () {
+        $("input[id=categoryId]").each(function () {
             if($(this).val() === categoryId){
                 $(this).attr("checked",true)
             }
         })
+        $("#datetimepicker").datetimepicker({
+            format: 'yyyy-mm-dd hh:mm:ss',
+            autoclose: true,
+            todayBtn: true,
+            todayHighlight: true,
+            showMeridian: true,
+            language: 'zh-CN',//中文，需要引用zh-CN.js包
+            startView: 2,//月视图
+            minView: 2//日期时间选择器所能够提供的最精确的时间选择视图
+        });
     })
     KindEditor.ready(function (K) {
         var editor = KindEditor.create("#blogContent", {
