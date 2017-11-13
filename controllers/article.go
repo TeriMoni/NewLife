@@ -2,7 +2,6 @@ package controllers
 
 import (
 	"strconv"
-	"NewLife/utils"
 	. "NewLife/models"
 
 	"github.com/astaxie/beego"
@@ -31,6 +30,7 @@ func (this *AddArticleController) Get() {
 	this.Data["art"] = art
 	this.Data["categories"] = categories
 	this.Data["userProfile"] = this.GetSession("userProfile")
+	this.Data["slider"] = "article"
 	this.TplName = "add-article.html"
 }
 
@@ -43,10 +43,13 @@ func (this *AddArticleController) Post() {
 	title := this.GetString("title")
 	content := this.GetString("content")
 	keywords := this.GetString("keywords")
-	uri := this.GetString("uri")
 	summary := this.GetString("summary")
-	author := this.GetString("author")
-
+	status, _ := this.GetInt("status")
+	visibility,_ := this.GetInt("visibility")
+	titlepic := this.GetString("titlepic")
+	tags := this.GetString("tags")
+	created := this.GetString("created")
+	categoryId, _ := this.GetInt("categoryId")
 	if "" == title {
 		this.Data["json"] = map[string]interface{}{"code": 0, "message": "请填写标题"}
 		this.ServeJSON()
@@ -60,12 +63,22 @@ func (this *AddArticleController) Post() {
 	}
 
 	var art Article
+	var category Category
 	art.Title = title
 	art.Keywords = keywords
-	art.Uri = uri
 	art.Summary = summary
 	art.Content = content
-	art.Author = author
+	art.Author = "admin"
+	art.Keywords = keywords
+	art.Summary = summary
+	art.Content = content
+	art.Status = status
+	art.Visibility = visibility
+	art.Titlepic = titlepic
+	art.Tag = tags
+	category.Id = categoryId
+	art.Created =created
+	art.Category = &category
 
 	id, err := AddArticle(art)
 	if err == nil {
@@ -121,6 +134,7 @@ func (this *EditArticleController) Get() {
 	//this.Data["json"] = map[string]interface{}{"code": 0, "message": err}
 	//this.ServeJSON()
 	this.Data["art"] = art
+	this.Data["slider"] = "article"
 	this.Data["categories"] = categories
 	this.Data["userProfile"] = this.GetSession("userProfile")
 	this.TplName = "update-article.html"
@@ -132,7 +146,6 @@ func (this *EditArticleController) Post() {
 	content := this.GetString("content")
 	keywords := this.GetString("keywords")
 	summary := this.GetString("summary")
-	author := this.GetString("author")
 	status, _ := this.GetInt("status")
 	visibility,_ := this.GetInt("visibility")
 	titlepic := this.GetString("titlepic")
@@ -162,13 +175,13 @@ func (this *EditArticleController) Post() {
 	art.Keywords = keywords
 	art.Summary = summary
 	art.Content = content
-	art.Author = author
+	art.Author = "admin"
 	art.Status = status
 	art.Visibility = visibility
 	art.Titlepic = titlepic
 	art.Tag = tags
 	category.Id = categoryId
-	art.Created =utils.GetTimestamp(created)
+	art.Created =created
 	art.Category = &category
 
 	err = UpdateArticle(id, art)
@@ -221,6 +234,7 @@ func (this *ListArticleController) Get() {
 
 	this.Data["paginator"] = paginator
 	this.Data["art"] = art
+	this.Data["slider"] = "article"
 	//userLogin := this.GetSession("userLogin")
 	//this.Data["isLogin"] = userLogin
 	//this.Data["isLogin"] = this.isLogin
