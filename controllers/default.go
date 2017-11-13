@@ -22,7 +22,7 @@ type MainController struct {
 func (this *MainController) Get() {
 	this.Data["Website"] = "www.beego.me"
 	this.Data["Email"] = "astaxie@gmail.com"
-	this.TplName = "index.tpl"
+	this.TplName = "index.html"
 }
 
 func (this *MainController) Go404() {
