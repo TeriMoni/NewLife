@@ -26,13 +26,17 @@ func init() {
 	orm.RegisterModel(new(Comment))
 }
 
-func UpdateComment(id int, updCom Comment) error {
+func UpdateComment(updCom Comment) error {
 	o := orm.NewOrm()
 	o.Using("default")
-	com := Comment{Id: id}
 
+	com := Comment{Id: updCom.Id}
+	com.Created = updCom.Created
+	com.ArticleId = updCom.ArticleId
+	com.Nickname = updCom.Nickname
+	com.Content = updCom.Content
 	com.Status = updCom.Status
-	_, err := o.Update(&com, "status")
+	_, err := o.Update(&com)
 	return err
 }
 
@@ -87,4 +91,17 @@ func CountComment(condArr map[string]string) int64 {
 	}
 	num, _ := qs.SetCond(cond).Count()
 	return num
+}
+func DeleteComment(id int) error  {
+	o := orm.NewOrm()
+	_, err := o.Delete(&Comment{Id: id})
+	return err
+}
+
+func GetComment(id int) (Comment,error){
+	o := orm.NewOrm()
+	qs := o.QueryTable("comment")
+	var com Comment
+	err := qs.Filter("Id",id).One(&com)
+	return com, err
 }
