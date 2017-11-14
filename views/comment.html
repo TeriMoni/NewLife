@@ -1,0 +1,314 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+  <meta charset="utf-8">
+  <meta name="renderer" content="webkit">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>文章 - 异清轩博客管理系统</title>
+  {{template "inc/meta.tpl" .}}
+</head>
+
+<body class="user-select">
+<section class="container-fluid">
+  {{template "inc/adminHead.tpl" .}}
+  <div class="row">
+    {{template "inc/slider.tpl" .}}
+    <div class="col-sm-9 col-sm-offset-3 col-md-10 col-lg-10 col-md-offset-2 main" id="main">
+      <form action="/Comment/checkAll" method="post">
+        <h1 class="page-header">管理 <span class="badge">{{.paginator.Nums}}</span></h1>
+        <div class="table-responsive">
+          <table class="table table-striped table-hover">
+            <thead>
+              <tr>
+                <th><span class="glyphicon glyphicon-info-sign"></span> <span class="visible-lg">文章Id</span></th>
+                <th><span class="glyphicon glyphicon-file"></span> <span class="visible-lg">摘要</span></th>
+                <th><span class="glyphicon glyphicon-user"></span> <span class="visible-lg">评论人</span></th>
+                <th><span class="glyphicon glyphicon-time"></span> <span class="visible-lg">日期</span></th>
+                <th><span class="glyphicon glyphicon-pencil"></span> <span class="visible-lg">操作</span></th>
+              </tr>
+            </thead>
+            <tbody>
+            {{range $k,$v := .coms}}
+            <tr>
+              <td>{{$v.Id}}</td>
+              {{if gt ($v.Content|len) 20}}
+              <td title="{{$v.Content}}">{{substr $v.Content 0 20}}...</td>
+              {{else}}
+              <td>{{$v.Content}}</td>
+              {{end}}
+              <td >{{$v.Nickname}}</td>
+              <td>{{$v.Created}}</td>
+              <td><a href="/comment/edit/{{$v.Id}}">修改</a> <a onClick="deleteConfirm('/comment/delete/{{$v.Id}}')">删除</a></td>
+            </tr>
+            {{else}}
+            <tr>
+            <td colspan="4" style="text-align: center">暂无数据</td>
+            </tr>
+            {{end}}
+            </tbody>
+          </table>
+        </div>
+        <footer class="message_footer" style="text-align: right;margin-right: 25px">
+          {{if .paginator.HasPages}}
+          <ul class="pagination pagination">
+            {{if .paginator.HasPrev}}
+            <li><a href="{{.paginator.PageLinkFirst}}">首页</a></li>
+            <li><a href="{{.paginator.PageLinkPrev}}">&laquo;</a></li>
+            {{else}}
+            <li class="disabled"><a>首页</a></li>
+            <li class="disabled"><a>&laquo;</a></li>
+            {{end}}
+            {{range $index, $page := .paginator.Pages}} <li{{if $.paginator.IsActive .}} class="active"{{end}}> <a href="{{$.paginator.PageLink $page}}">{{$page}}</a>
+            </li>
+            {{end}}
+            {{if .paginator.HasNext}}
+            <li><a href="{{.paginator.PageLinkNext}}">&raquo;</a></li>
+            <li><a href="{{.paginator.PageLinkLast}}">尾页</a></li>
+            {{else}}
+            <li class="disabled"><a>&raquo;</a></li>
+            <li class="disabled"><a>尾页</a></li>
+            {{end}}
+          </ul>
+          {{end}}
+        </footer>
+      </form>
+    </div>
+  </div>
+</section>
+<!--查看评论模态框-->
+<div class="modal fade" id="seeComment" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" >查看评论</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table" style="margin-bottom:0px;">
+            <thead>
+              <tr> </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td wdith="20%">评论ID:</td>
+                <td width="80%" class="see-comment-id"></td>
+              </tr>
+              <tr>
+                <td wdith="20%">评论页面:</td>
+                <td width="80%" class="see-comment-page"></td>
+              </tr>
+              <tr>
+                <td wdith="20%">评论内容:</td>
+                <td width="80%" class="see-comment-content"></td>
+              </tr>
+              <tr>
+                <td wdith="20%">IP:</td>
+                <td width="80%" class="see-comment-ip"></td>
+              </tr>
+              <tr>
+                <td wdith="20%">所在地:</td>
+                <td width="80%" class="see-comment-address"></td>
+              </tr>
+              <tr>
+                <td wdith="20%">系统:</td>
+                <td width="80%" class="see-comment-system"></td>
+              </tr>
+              <tr>
+                <td wdith="20%">浏览器:</td>
+                <td width="80%" class="see-comment-browser"></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr></tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">朕已阅</button>
+        </div>
+      </div>
+  </div>
+</div>
+<!--个人信息模态框-->
+<div class="modal fade" id="seeUserInfo" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <form action="" method="post">
+      <div class="modal-content">
+        <div class="modal-header">
+          <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+          <h4 class="modal-title" >个人信息</h4>
+        </div>
+        <div class="modal-body">
+          <table class="table" style="margin-bottom:0px;">
+            <thead>
+              <tr> </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td wdith="20%">姓名:</td>
+                <td width="80%"><input type="text" value="王雨" class="form-control" name="truename" maxlength="10" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">用户名:</td>
+                <td width="80%"><input type="text" value="admin" class="form-control" name="username" maxlength="10" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">电话:</td>
+                <td width="80%"><input type="text" value="18538078281" class="form-control" name="usertel" maxlength="13" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">旧密码:</td>
+                <td width="80%"><input type="password" class="form-control" name="old_password" maxlength="18" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">新密码:</td>
+                <td width="80%"><input type="password" class="form-control" name="password" maxlength="18" autocomplete="off" /></td>
+              </tr>
+              <tr>
+                <td wdith="20%">确认密码:</td>
+                <td width="80%"><input type="password" class="form-control" name="new_password" maxlength="18" autocomplete="off" /></td>
+              </tr>
+            </tbody>
+            <tfoot>
+              <tr></tr>
+            </tfoot>
+          </table>
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+          <button type="submit" class="btn btn-primary">提交</button>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+<div class="modal fade" id="delcfmModel">
+  <div class="modal-dialog">
+    <div class="modal-content message_align">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">×</span></button>
+        <h4 class="modal-title">提示信息</h4>
+      </div>
+      <div class="modal-body">
+        <p>您确认要删除吗？</p>
+      </div>
+      <div class="modal-footer">
+        <input type="hidden" id="url"/>
+        <button type="button" class="btn btn-default" data-dismiss="modal">取消</button>
+        <a onclick="urlSubmit()" class="btn btn-success" data-dismiss="modal">确定</a>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
+
+<!--个人登录记录模态框-->
+<div class="modal fade" id="seeUserLoginlog" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" >登录记录</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table" style="margin-bottom:0px;">
+          <thead>
+            <tr>
+              <th>登录IP</th>
+              <th>登录时间</th>
+              <th>状态</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>::1:55570</td>
+              <td>2016-01-08 15:50:28</td>
+              <td>成功</td>
+            </tr>
+            <tr>
+              <td>::1:64377</td>
+              <td>2016-01-08 10:27:44</td>
+              <td>成功</td>
+            </tr>
+            <tr>
+              <td>::1:64027</td>
+              <td>2016-01-08 10:19:25</td>
+              <td>成功</td>
+            </tr>
+            <tr>
+              <td>::1:57081</td>
+              <td>2016-01-06 10:35:12</td>
+              <td>成功</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">朕已阅</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--微信二维码模态框-->
+<div class="modal fade user-select" id="WeChat" tabindex="-1" role="dialog" aria-labelledby="WeChatModalLabel">
+  <div class="modal-dialog" role="document" style="margin-top:120px;max-width:280px;">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="WeChatModalLabel" style="cursor:default;">微信扫一扫</h4>
+      </div>
+      <div class="modal-body" style="text-align:center"> <img src="images/weixin.jpg" alt="" style="cursor:pointer"/> </div>
+    </div>
+  </div>
+</div>
+<!--提示模态框-->
+<div class="modal fade user-select" id="areDeveloping" tabindex="-1" role="dialog" aria-labelledby="areDevelopingModalLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="areDevelopingModalLabel" style="cursor:default;">该功能正在日以继夜的开发中…</h4>
+      </div>
+      <div class="modal-body"> <img src="images/baoman/baoman_01.gif" alt="深思熟虑" />
+        <p style="padding:15px 15px 15px 100px; position:absolute; top:15px; cursor:default;">很抱歉，程序猿正在日以继夜的开发此功能，本程序将会在以后的版本中持续完善！</p>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-primary" data-dismiss="modal">朕已阅</button>
+      </div>
+    </div>
+  </div>
+</div>
+<!--右键菜单列表-->
+<div id="rightClickMenu">
+  <ul class="list-group rightClickMenuList">
+    <li class="list-group-item disabled">欢迎访问异清轩博客</li>
+    <li class="list-group-item"><span>IP：</span>172.16.10.129</li>
+    <li class="list-group-item"><span>地址：</span>河南省郑州市</li>
+    <li class="list-group-item"><span>系统：</span>Windows10 </li>
+    <li class="list-group-item"><span>浏览器：</span>Chrome47</li>
+  </ul>
+</div>
+{{template "inc/foot.tpl" .}}
+<script>
+$(function () {
+    deleteConfirm = function(url) {
+        $('#url').val(url);//给会话中的隐藏属性URL赋值
+        $('#delcfmModel').modal();
+    }
+    urlSubmit = function(){
+        var url=$.trim($("#url").val());//获取会话中的隐藏属性URL
+        $.ajax({
+            type: "GET",
+            url: url,
+            dataType:'json',
+            success:function (data) {
+                deleteDialog(data.message)
+                setTimeout(function(){window.location.reload();}, 1000);
+            }
+        })
+    }
+});
+</script>
+</body>
+</html>
