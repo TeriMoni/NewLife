@@ -17,20 +17,20 @@
       <h1 class="page-header">修改栏目</h1>
       <form id="category-form" method="post">
         <div class="form-group">
-          <label for="category-name">栏目名称</label>
-          <input type="text" id="category-name" name="Name" value="{{.category.Name}}" class="form-control" placeholder="在此处输入栏目名称" required autocomplete="off">
+          <label for="name">栏目名称</label>
+          <input type="text" id="name" name="Name" value="{{.category.Name}}" class="form-control" placeholder="在此处输入栏目名称" required autocomplete="off">
           <span class="prompt-text">这将是它在站点上显示的名字。</span> </div>
         <div class="form-group">
-          <label for="category-alias">栏目别名</label>
-          <input type="text" id="category-alias" name="Alias" value="{{.category.Alias}}" class="form-control" placeholder="在此处输入栏目别名" required autocomplete="off">
+          <label for="alias">栏目别名</label>
+          <input type="text" id="alias" name="Alias" value="{{.category.Alias}}" class="form-control" placeholder="在此处输入栏目别名" required autocomplete="off">
           <span class="prompt-text">“别名”是在URL中使用的别称，它可以令URL更美观。通常使用小写，只能包含字母，数字和连字符（-）。</span> </div>
         <div class="form-group">
-          <label for="category-keywords">关键字</label>
-          <input type="text" id="category-keywords" name="Keywords" value="{{.category.Keywords}}" class="form-control" placeholder="在此处输入栏目关键字" autocomplete="off">
+          <label for="keywords">关键字</label>
+          <input type="text" id="keywords" name="Keywords" value="{{.category.Keywords}}" class="form-control" placeholder="在此处输入栏目关键字" autocomplete="off">
           <span class="prompt-text">关键字会出现在网页的keywords属性中。</span> </div>
         <div class="form-group">
-          <label for="category-describe">描述</label>
-          <textarea class="form-control" id="category-describe" name="Description" rows="4" autocomplete="off">{{.category.Description}}</textarea>
+          <label for="description">描述</label>
+          <textarea class="form-control" id="description" name="Description" rows="4" autocomplete="off">{{.category.Description}}</textarea>
           <span class="prompt-text">描述会出现在网页的description属性中。</span> </div>
         <input type="hidden"  name="Id" value="{{.category.Id}}">
         <button class="btn btn-primary" type="submit" name="submit">更新</button>
