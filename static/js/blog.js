@@ -17,7 +17,7 @@ $(function(){
 	});
 	
 	
-    //添加评论
+    //添加评论或者修改评论
 	$('#comment-form').validate({
 		ignore:'',
         rules : {
@@ -25,24 +25,24 @@ $(function(){
             content:{required : true}
         },
         messages : {
-            nickname : {required : '请填写昵称',rangelength : '昵称最多10个字'},
+            nickname : {required : '请填写评论人',rangelength : '昵称最多10个字'},
             content : {required: '请填写评论内容'}
         },
         submitHandler:function(form) {
-			var id = $('input[name="id"]').val();
+			var id = $('input[name="Id"]').val();
 			var url = id ? '/comment/edit/'+id : '/comment/add';
             $(form).ajaxSubmit({
                 url:url,
                 type:'POST',
                 dataType:'json',
                 success:function(data) {
-                    dialogInfo(data.message)
                     if (data.code == 1) {
-                      $('#comment-form')[0].reset();
+                        dialogInfo(data.message)
+                        setTimeout(function(){window.location.href='/comment/list'}, 1000);
                     } else {
-                        
+                        dialogInfo(data.message)
+                        setTimeout(function(){window.location.href='/comment/edit/'+id}, 1000);
                     }
-					setTimeout(function(){ $('#dialogInfo').modal('hide'); }, 1000);
                 }
             });
         }
@@ -68,17 +68,54 @@ $(function(){
                 type:'POST',
                 dataType:'json',
                 success:function(data) {
-                    dialogInfo(data.message)
                     if (data.code == 1) {
 						url = id ? '/article':'/article/add';
-						setTimeout(function(){window.location.href=url}, 1000);
+                        dialogInfo(data.message)
+                        setTimeout(function(){window.location.href='/article/list'}, 1000);
                     } else {
-                        
+                        dialogInfo(data.message)
+                        setTimeout(function(){window.location.reload()}, 1000);
                     }
                 }
             });
         }
     });
+
+    //添加及修改栏目
+    $('#category-form').validate({
+        ignore:'',
+        rules : {
+            name:{ required : true,rangelength : [1, 255]},
+            alias:{required : true},
+            keywords:{required : false},
+            description:{required : true}
+        },
+        messages : {
+            name : {required : '分类名称必须填写',rangelength : '分类名称最多255字'},
+            alias : {required: '请输入一个分类别名'},
+            description : {required : '分类描述请填写'}
+        },
+        submitHandler:function(form) {
+            var id = $('input[name="Id"]').val();
+            var url = id != 0 ? '/category/update/'+id : '/category/add';
+            $(form).ajaxSubmit({
+                url:url,
+                type:'POST',
+                dataType:'json',
+                success:function(data) {
+                    if (data.code == 1) {
+                        url = id ? '/category/list':'/article/add';
+                        dialogInfo(data.message)
+                        setTimeout(function(){window.location.href='/category/list'}, 1000);
+                    } else {
+                        dialogInfo(data.message)
+                        setTimeout(function(){window.location.reload()}, 1000);
+                    }
+                }
+            });
+        }
+    });
+
 	
 	//多图上传	
 	$('#uploadMulti-form').validate({        
@@ -98,7 +135,7 @@ $(function(){
                 dataType:'json',
                 success:function(data) {
                     dialogInfo(data.message)
-                    if (data.code == 1) {						
+                    if (data.code == 1) {
 						setTimeout(function(){window.location.href='/album/'}, 1000);
                     } else {
                         
@@ -199,6 +236,30 @@ function dialogInfo(msg) {
 	html += '</div>';
 	$('body').append(html);
 	$('#dialogInfo').modal('show'); 
+}
+
+
+deleteDialog  = function(msg) {
+    var html = '';
+    html += '<div class="modal fade" id="dialogInfo" tabindex="-1" role="dialog" aria-labelledby="dialogInfoTitle">';
+    html += '<div class="modal-dialog" role="document">';
+    html += '<div class="modal-content">';
+    html += '<div class="modal-header">';
+    html += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
+    html += '<h4 class="modal-title" id="dialogInfoTitle">信息提示</h4>';
+    html += ' </div>';
+    html += '<div class="modal-body">';
+    html += '<p>'+msg+'</p>';
+    html += '</div>';
+    // html += '<div class="modal-footer">';
+    // html += ' <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>';
+    // html += ' <button type="button" class="btn btn-primary">Send message</button>';
+    // html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    html += '</div>';
+    $('body').append(html);
+    $('#dialogInfo').modal('show');
 }
 
 function dialogAlbum(id, title, summary, status) {
