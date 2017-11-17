@@ -66,3 +66,7 @@ body {
 .form-signin > .checkbox  > label {
     color: white;
 }
+.div-inline{
+    margin-bottom: 5px;
+    display:inline
+}
