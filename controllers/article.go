@@ -208,7 +208,7 @@ func (this *ListArticleController) Get() {
 
 	page, err1 := this.GetInt("p")
 	title := this.GetString("title")
-	keywords := this.GetString("keywords")
+	category := this.GetString("category")
 	status := this.GetString("status")
 	if err1 != nil {
 		page = 1
@@ -219,9 +219,11 @@ func (this *ListArticleController) Get() {
 		offset = 9
 	}
 
+	categories := GetAllCategory()
+
 	condArr := make(map[string]string)
 	condArr["title"] = title
-	condArr["keywords"] = keywords
+	condArr["category"] = category
 	if !this.isLogin {
 		condArr["status"] = "1"
 	} else {
@@ -231,15 +233,46 @@ func (this *ListArticleController) Get() {
 
 	paginator := pagination.SetPaginator(this.Ctx, offset, countArticle)
 	_, _, art := ListArticle(condArr, page, offset)
-
+	this.Data["slider"] = "index"
+	this.Data["categories"] = categories
 	this.Data["paginator"] = paginator
 	this.Data["art"] = art
-	this.Data["slider"] = "article"
-	//userLogin := this.GetSession("userLogin")
-	//this.Data["isLogin"] = userLogin
-	//this.Data["isLogin"] = this.isLogin
-	this.Data["userProfile"] = this.GetSession("userProfile")
 	this.TplName = "article.html"
+}
+
+func (this *ListArticleController) Index() {
+
+	page, err1 := this.GetInt("p")
+	title := this.GetString("title")
+	category := this.GetString("category")
+	status := this.GetString("status")
+	if err1 != nil {
+		page = 1
+	}
+
+	offset, err2 := beego.AppConfig.Int("pageoffset")
+	if err2 != nil {
+		offset = 9
+	}
+
+	categories := GetAllCategory()
+
+	condArr := make(map[string]string)
+	condArr["title"] = title
+	condArr["category"] = category
+	if !this.isLogin {
+		condArr["status"] = "1"
+	} else {
+		condArr["status"] = status
+	}
+	countArticle := CountArticle(condArr)
+
+	paginator := pagination.SetPaginator(this.Ctx, offset, countArticle)
+	_, _, art := ListArticle(condArr, page, offset)
+	this.Data["categories"] = categories
+	this.Data["paginator"] = paginator
+	this.Data["art"] = art
+	this.TplName = "index.tpl"
 }
 
 //详情
@@ -283,5 +316,5 @@ func (this *ShowArticleController) Get() {
 	this.Data["paginator"] = paginator
 	this.Data["coms"] = coms
 
-	this.TplName = "article-detail.tpl"
+	this.TplName = "post.tpl"
 }
