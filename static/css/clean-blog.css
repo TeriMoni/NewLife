@@ -174,17 +174,19 @@ blockquote {
     text-decoration: none;
     color: #0085A1; }
   .post-preview > a > .post-title {
-    font-size: 30px;
-    margin-top: 30px;
-    margin-bottom: 10px; }
+    font-size: 25px;
+    margin-top: 20px;
+    margin-bottom: 20px; }
   .post-preview > a > .post-subtitle {
     margin: 0;
     font-weight: 300;
-    margin-bottom: 10px; }
+    margin-bottom: 10px;
+    font-size: 1.5rem;
+  }
 
 .post-preview > .post-meta {
-  color: #777777;
-  font-size: 18px;
+  /*color: #777777;*/
+  font-size: 17px;
   font-style: italic;
   margin-top: 0; }
   .post-preview > .post-meta > a {
@@ -194,9 +196,10 @@ blockquote {
       color: #0085A1;
       text-decoration: underline; }
 
+
 @media only screen and (min-width: 768px) {
   .post-preview > a > .post-title {
-    font-size: 36px; } }
+    font-size: 25px; } }
 
 .section-heading {
   font-size: 36px;
