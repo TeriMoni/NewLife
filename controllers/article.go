@@ -233,7 +233,7 @@ func (this *ListArticleController) Get() {
 
 	paginator := pagination.SetPaginator(this.Ctx, offset, countArticle)
 	_, _, art := ListArticle(condArr, page, offset)
-	this.Data["slider"] = "index"
+	this.Data["slider"] = "article"
 	this.Data["categories"] = categories
 	this.Data["paginator"] = paginator
 	this.Data["art"] = art
