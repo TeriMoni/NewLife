@@ -18,9 +18,9 @@
 
     <!-- Main Content -->
     <div class="container">
+
         <div class="row">
             <div class="col-lg-8 offset-lg-2 col-md-10 offset-md-1">
-
                 {{range $k,$v := .art}}
                 <div class="post-preview">
                     <a href="/article/{{$v.Id}}">
@@ -31,14 +31,14 @@
                             {{$v.Summary}}
                         </h3>
                     </a>
-                    <p class="post-meta">作者 <a href="#">{{$v.Author}}</a> {{$v.Created}}</p>
+                    <p class="post-meta">作者 <a href="#">{{$v.Author}}</a> {{$v.Created}}<span>&nbsp;{{$v.Category.Name}}</span></p>
                 </div>
                 <hr>
                 {{else}}
                 <div class="post-preview">暂无数据</div>
                 {{end}}
                 <!-- Pager -->
-                    <footer class="message_footer" style="text-align: right;margin-right: 25px">
+                    <footer class="message_footer" style="text-align:right;text-align: right">
                         {{if .paginator.HasPages}}
                         <ul class="pagination pagination">
                             {{if .paginator.HasPrev}}
@@ -64,6 +64,7 @@
             </div>
         </div>
     </div>
+
     <hr>
     <!-- Footer -->
     <footer>
