@@ -7,7 +7,7 @@ import (
 )
 
 func init() {
-	beego.Router("/", &controllers.ListArticleController{})
+	beego.Router("/", &controllers.ListArticleController{},"get:Index")
 	beego.Router("/404.html", &controllers.BaseController{}, "*:Go404")
 
 	beego.Router("/article", &controllers.ListArticleController{})
