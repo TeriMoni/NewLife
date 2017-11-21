@@ -1,8 +1,6 @@
 package controllers
 
 import (
-	"time"
-
 	. "NewLife/models"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/utils/pagination"
@@ -44,8 +42,6 @@ func (this *AddCommentController) Post() {
 	com.Uri = uri
 	com.Content = content
 	com.Status = 1
-	com.Created = time.Now().Unix()
-
 	id, err := AddComment(com)
 	if err == nil {
 		this.Data["json"] = map[string]interface{}{"code": 1, "message": "评论添加成功", "id": id}
@@ -156,5 +152,47 @@ func (this *DeleteCommentController) Get(){
 	}else{
 		this.Data["json"] = map[string]interface{}{"code": 0, "message": "删除评论失败"}
 	}
+	this.ServeJSON()
+}
+
+type MoreCommentController struct {
+	BaseController
+}
+
+//获取更多评论
+func (this *MoreCommentController) Get() {
+
+	idstr := this.GetString("id")
+	id, err := strconv.Atoi(idstr)
+
+	art, err := GetArticle(id)
+	if err != nil {
+		this.Redirect("/404.html", 302)
+	}
+	if !this.isLogin {
+		if art.Status == 0 {
+			this.Redirect("/404.html", 302)
+		}
+	}
+	this.Data["art"] = art
+
+	//评论分页
+	page, err1 := this.GetInt("p")
+	if err1 != nil {
+		page = 1
+	}
+	offset, err2 := beego.AppConfig.Int("pageoffset")
+	if err2 != nil {
+		offset = 9
+	}
+	condCom := make(map[string]string)
+	condCom["article_id"] = idstr
+	if !this.isLogin {
+		condCom["status"] = "1"
+	}
+	//countComment := CountComment(condCom)
+	//paginator := pagination.SetPaginator(this.Ctx, offset, countComment)
+	_, _, coms := ListComment(condCom, page, offset)
+	this.Data["json"] = map[string]interface{}{"coms": coms}
 	this.ServeJSON()
 }
