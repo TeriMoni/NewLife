@@ -26,6 +26,7 @@ func init() {
 	beego.Router("/comment/list", &controllers.ListCommentController{})
 	beego.Router("/comment/edit/:id", &controllers.EditCommentController{})
 	beego.Router("/comment/delete/:id", &controllers.DeleteCommentController{})
+	beego.Router("/comment/more/:p", &controllers.MoreCommentController{})
 
 	beego.Router("/album", &controllers.ListAlbumController{})
 	beego.Router("/album/upload", &controllers.UploadAlbumController{})
