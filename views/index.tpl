@@ -31,7 +31,7 @@
                             {{$v.Summary}}
                         </h3>
                     </a>
-                    <p class="post-meta">作者 <a href="#">{{$v.Author}}</a> {{$v.Created}}<span>&nbsp;{{$v.Category.Name}}</span></p>
+                    <p class="post-meta"><span class="glyphicon glyphicon-tags">&nbsp;{{$v.Category.Name}}</span>&nbsp;&nbsp;<span class="glyphicon glyphicon-calendar">&nbsp;{{$v.Created}}</span></p>
                 </div>
                 <hr>
                 {{else}}
