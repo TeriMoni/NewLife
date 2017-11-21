@@ -3,7 +3,7 @@ package models
 import (
 	//"strconv"
 	"time"
-
+	. "NewLife/utils"
 	"github.com/astaxie/beego/orm"
 	_ "github.com/go-sql-driver/mysql"
 )
@@ -14,7 +14,7 @@ type Comment struct {
 	Nickname  string
 	Uri       string
 	Content   string
-	Created   int64
+	Created   string
 	Status    int
 }
 
@@ -49,7 +49,7 @@ func AddComment(updCom Comment) (int64, error) {
 	com.Nickname = updCom.Nickname
 	com.Uri = updCom.Uri
 	com.Content = updCom.Content
-	com.Created = time.Now().Unix()
+	com.Created = GetDate(time.Now().Unix())
 	com.Status = updCom.Status
 
 	id, err := o.Insert(com)
@@ -58,7 +58,7 @@ func AddComment(updCom Comment) (int64, error) {
 
 func ListComment(condArr map[string]string, page int, offset int) (num int64, err error, com []Comment) {
 	o := orm.NewOrm()
-	qs := o.QueryTable("comment")
+	qs := o.QueryTable("comment").OrderBy("-created")
 	cond := orm.NewCondition()
 	if condArr["article_id"] != "" {
 		cond = cond.And("article_id", condArr["article_id"])
