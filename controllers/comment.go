@@ -2,6 +2,7 @@ package controllers
 
 import (
 	. "NewLife/models"
+	. "NewLife/utils"
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/utils/pagination"
 	"strconv"
@@ -190,9 +191,21 @@ func (this *MoreCommentController) Get() {
 	if !this.isLogin {
 		condCom["status"] = "1"
 	}
-	//countComment := CountComment(condCom)
-	//paginator := pagination.SetPaginator(this.Ctx, offset, countComment)
+	countComment := CountComment(condCom)
+	paginator := pagination.SetPaginator(this.Ctx, offset, countComment)
+	var flag int
+	if paginator.HasNext(){
+		flag = 0
+	}else {
+		flag = 1
+	}
+
 	_, _, coms := ListComment(condCom, page, offset)
-	this.Data["json"] = map[string]interface{}{"coms": coms}
+	images := make([]string, len(coms))
+	for index, _ := range coms {
+		images[index] = GetGravatar();
+	}
+	this.Data["paginator"] = paginator
+	this.Data["json"] = map[string]interface{}{"coms": coms ,"flag":flag,"images":images}
 	this.ServeJSON()
 }
