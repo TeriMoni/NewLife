@@ -39,7 +39,11 @@ body {
   border-radius: 4px;
 }
 .form-signin .help-block{color:#a94442;}
-.padtb10 {padding:10px 0;}
+.padtb10 {
+    padding:10px 0;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
 
 .form-signin-heading{
     text-align: center;
@@ -73,4 +77,9 @@ body {
 
 .pagination {
     float: right;
+}
+
+.media{
+    padding-bottom: 15px;
+    border-bottom: solid 1px;
 }
