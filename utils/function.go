@@ -90,7 +90,7 @@ func GetDateMH(timestamp int64) string {
 	return tm.Format("01-02 03:04")
 }
 func GetGravatar() string {
-	i := RandInt64(1, 5)
+	i := RandInt64(1, 10)
 	return "/static/img/avatar/" + fmt.Sprintf("%d", i) + ".jpg"
 }
 
