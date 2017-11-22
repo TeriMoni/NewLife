@@ -40,14 +40,13 @@
                         <div class="media">
                             <div class="media-left"> <a href="{{$v.Uri}}" title="{{$v.Nickname}}" target="_blank"> <img class="media-object" alt="{{$v.Nickname}}" style="width: 64px; height: 64px;" src="{{avatar}}" data-holder-rendered="true"> </a> </div>
                             <div class="media-body">
-                                <h4 class="media-heading">{{$v.Nickname}} <span class="label label-info pull-right">（{{$v.Created}}）</span></h4>
+                                <h4 class="media-heading">{{$v.Nickname}} <span class="pull-right">{{$v.Created}}</span></h4>
                                 <div> {{$v.Content}}
                                 </div>
                             </div>
                         </div>
                         {{end}}
                         {{end}}
-                         </div>
                         {{if .paginator.HasNext}}
                         <div class="media" style="margin-bottom: 10px" id="moreComment">
                             <a href="javascript:getMoreComment()" style="text-align: center;background-color: white;color: #666;background: #f5f5f5;font-size: 12px;margin: 15px auto 0;border: 1px solid #c4c4c4;width: 125px;
