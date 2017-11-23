@@ -39,6 +39,7 @@ func init() {
 
 	beego.Router("/index", &controllers.AdminIndexController{})
 
+	beego.Router("/contact",&controllers.ContactController{},"get:Get;post:Post")
 
 	//使用restful 自定义路由规则
 	beego.Router("/category/list",&controllers.CategoryController{},"*:ListCategory")
