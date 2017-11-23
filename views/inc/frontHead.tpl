@@ -8,7 +8,7 @@
     <title>简单生活</title>
 
     <!-- Bootstrap Core CSS -->
-    <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+   <link href="/static/lib/bootstrap/css/bootstrap.min.css" rel="stylesheet">
 
     <!-- Additional fonts for this theme -->
     <link href="/static/lib/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
@@ -54,7 +54,7 @@
                     <a class="nav-link page-scroll" href="/">相册</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link page-scroll" href="contact.html">联系</a>
+                    <a class="nav-link page-scroll" href="/contact">联系</a>
                 </li>
             </ul>
         </div>
