@@ -427,10 +427,10 @@ textarea::-webkit-scrollbar-thumb {
 	-moz-box-shadow: none;
 }
 .form-control:focus {
-	border: #CCC solid 1px;
+	/*border: #CCC solid 1px;
 	box-shadow: none;
 	-webkit-box-shadow: none;
-	-moz-box-shadow: none;
+	-moz-box-shadow: none;*/
 }
 .input-control {
 	display: block;
