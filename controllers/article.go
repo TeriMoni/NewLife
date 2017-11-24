@@ -3,7 +3,6 @@ package controllers
 import (
 	"strconv"
 	. "NewLife/models"
-
 	"github.com/astaxie/beego"
 	"github.com/astaxie/beego/utils/pagination"
 )
@@ -242,6 +241,7 @@ func (this *ListArticleController) Get() {
 
 func (this *ListArticleController) Index() {
 
+	//记录访问量
 	page, err1 := this.GetInt("p")
 	title := this.GetString("title")
 	category := this.GetString("category")
