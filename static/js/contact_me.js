@@ -20,22 +20,22 @@ $(function() {
                 firstName = name.split(' ').slice(0, -1).join(' ');
             }
             $.ajax({
-                url: "././mail/contact_me.php",
+                url: "/contact",
                 type: "POST",
                 data: {
-                    name: name,
-                    phone: phone,
-                    email: email,
-                    message: message
+                    Name: name,
+                    Phone: phone,
+                    Email: email,
+                    Message: message
                 },
                 cache: false,
                 success: function() {
                     // Success message
                     $('#success').html("<div class='alert alert-success alert-dismissable fade show'>");
-                    $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                    $('#success > .alert-success').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true' style='    padding: 0.20rem 0.9rem;'>&times;")
                         .append("</button>");
                     $('#success > .alert-success')
-                        .append("Your message has been sent.");
+                        .append("你的信息已经送达，谢谢！");
                     $('#success > .alert-success')
                         .append('</div>');
 
@@ -45,9 +45,9 @@ $(function() {
                 error: function() {
                     // Fail message
                     $('#success').html("<div class='alert alert-danger alert-dismissable fade show'>");
-                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;")
+                    $('#success > .alert-danger').html("<button type='button' class='close' data-dismiss='alert' aria-hidden='true' style=' padding: 0.20rem 0.9rem;'>&times;")
                         .append("</button>");
-                    $('#success > .alert-danger').append("Sorry " + firstName + ", it seems that my mail server is not responding. Please try again later!");
+                    $('#success > .alert-danger').append("对不起 " + firstName + ", 服务器好像出了点问题. 请稍后再试!");
                     $('#success > .alert-danger').append('</div>');
                     //clear all fields
                     $('#contactForm').trigger("reset");
