@@ -19,12 +19,12 @@ golang实现的博客系统,文件上传，文章，标签，分类等管理
 前后台模板是网上选择的，样式自己修改，
 
 ## 后台效果图
-![image](C:\Users\bin.liu\Desktop\login.png)
-![image](C:\Users\bin.liu\Desktop\article.png)
+![image](https://github.com/TeriMoni/learngit/tree/master/img/login.png)
+![image](https://github.com/TeriMoni/learngit/tree/master/img/article.png)
 
 后台其他功能正在完善阶段
 
 ## 前台效果图
-![image](C:\Users\bin.liu\Desktop\index.png)
+![image](https://github.com/TeriMoni/learngit/tree/master/img/index.png)
 前台基本功能交互已经完成，细节待优化.
 
