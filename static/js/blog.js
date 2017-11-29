@@ -38,10 +38,10 @@ $(function(){
                 success:function(data) {
                     if (data.code == 1) {
                         dialogInfo(data.message)
-                        setTimeout(function(){window.location.href='/comment/list'}, 1000);
+                        setTimeout(function(){window.location.reload()}, 1000);
                     } else {
                         dialogInfo(data.message)
-                        setTimeout(function(){window.location.href='/comment/edit/'+id}, 1000);
+                        setTimeout(function(){window.location.reload()}, 1000);
                     }
                 }
             });
@@ -221,7 +221,7 @@ function dialogInfo(msg) {
     html += '<div class="modal-content">';
     html += '<div class="modal-header">';
     html += '<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>';
-    html += '<h4 class="modal-title" id="dialogInfoTitle">信息提示</h4>';
+    html += '<h4 class="modal-title" id="dialogInfoTitle" >信息提示</h4>';
     html += ' </div>';
     html += '<div class="modal-body">';
     html += '<p>'+msg+'</p>';
@@ -234,7 +234,8 @@ function dialogInfo(msg) {
   	html += '</div>';
 	html += '</div>';
 	$('body').append(html);
-	$('#dialogInfo').modal('show'); 
+	$('#dialogInfo').modal('show');
+
 }
 
 
